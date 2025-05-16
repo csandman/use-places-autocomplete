@@ -1,5 +1,5 @@
 import type { FC, ChangeEvent } from "react";
-import { KeyboardEvent, useState } from "react";
+import { type KeyboardEvent, useState } from "react";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
 
@@ -69,11 +69,10 @@ const App: FC = () => {
     }
 
     setCurrIndex(nextIndex);
-    // @ts-ignore
-    setValue(data[nextIndex] ? data[nextIndex].description : cachedVal, false);
+    setValue((nextIndex !== null && data[nextIndex]) ? data[nextIndex].description : cachedVal, false);
   };
 
-  const renderSuggestions = (): JSX.Element => {
+  const renderSuggestions = (): React.ReactElement => {
     const suggestions = data.map((suggestion: Suggestion, idx: number) => {
       const {
         place_id,
@@ -81,7 +80,6 @@ const App: FC = () => {
       } = suggestion;
 
       return (
-        // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         <li
           key={place_id}
           id={`ex-list-item-${idx}`}

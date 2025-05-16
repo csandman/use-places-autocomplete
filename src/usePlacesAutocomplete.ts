@@ -1,7 +1,6 @@
-import { useState, useRef, useCallback, useEffect } from "react";
-
-import useLatest from "./useLatest";
+import { useCallback, useEffect, useRef, useState } from "react";
 import _debounce from "./debounce";
+import useLatest from "./useLatest";
 
 export interface HookArgs {
   requestOptions?: Omit<google.maps.places.AutocompletionRequest, "input">;

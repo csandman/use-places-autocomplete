@@ -1,6 +1,5 @@
 import { renderHook } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
-
+import { describe, expect, it } from "vitest";
 import useLatest from "../useLatest";
 
 describe("useLatest", () => {

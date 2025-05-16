@@ -1,11 +1,10 @@
-import { renderHook, act } from "@testing-library/react";
-import { describe, beforeEach, it, expect, vi } from "vitest";
-
+import { act, renderHook } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import _debounce from "../debounce";
 import usePlacesAutocomplete, {
   HookArgs,
   loadApiErr,
 } from "../usePlacesAutocomplete";
-import _debounce from "../debounce";
 
 vi.useFakeTimers();
 vi.mock("../debounce");

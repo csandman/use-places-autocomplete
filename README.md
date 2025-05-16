@@ -1,8 +1,18 @@
 # <em><b>USE-PLACES-AUTOCOMPLETE</b></em>
 
-This is a React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) for [Google Maps Places Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete), which helps you build a UI component with the feature of place autocomplete easily! By leveraging the power of [Google Maps Places API](https://developers.google.com/maps/documentation/javascript/places), you can provide a great UX (user experience) for user interacts with your search bar or form, etc. Hope you guys 👍🏻 it.
+This is a React
+[hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) for
+[Google Maps Places Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete),
+which helps you build a UI component with the feature of place autocomplete
+easily! By leveraging the power of
+[Google Maps Places API](https://developers.google.com/maps/documentation/javascript/places),
+you can provide a great UX (user experience) for user interacts with your search
+bar or form, etc. Hope you guys 👍🏻 it.
 
-❤️ it? ⭐️ it on [GitHub](https://github.com/wellyshen/use-places-autocomplete/stargazers) or [Tweet](https://twitter.com/intent/tweet?text=With%20@use-places-autocomplete,%20I%20can%20build%20a%20component%20with%20the%20feature%20of%20place%20autocomplete%20easily!%20Thanks,%20@Welly%20Shen%20🤩) about it.
+❤️ it? ⭐️ it on
+[GitHub](https://github.com/wellyshen/use-places-autocomplete/stargazers) or
+[Tweet](https://twitter.com/intent/tweet?text=With%20@use-places-autocomplete,%20I%20can%20build%20a%20component%20with%20the%20feature%20of%20place%20autocomplete%20easily!%20Thanks,%20@Welly%20Shen%20🤩)
+about it.
 
 [![build status](https://img.shields.io/github/workflow/status/wellyshen/use-places-autocomplete/CI?style=flat-square)](https://github.com/wellyshen/use-places-autocomplete/actions?query=workflow%3ACI)
 [![coverage status](https://img.shields.io/coveralls/github/wellyshen/use-places-autocomplete?style=flat-square)](https://coveralls.io/github/wellyshen/use-places-autocomplete?branch=master)
@@ -22,23 +32,34 @@ This is a React [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom
 
 ## Features
 
-- 🧠 Provides intelligent places suggestions powered by [Google Maps Places API](https://developers.google.com/maps/documentation/javascript/places).
-- 🎣 Builds your own customized autocomplete UI by [React hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
-- 🔧 [Utility functions](#utility-functions) to do geocoding and get geographic coordinates using [Google Maps Geocoding API](https://developers.google.com/maps/documentation/javascript/geocoding).
-- 🤑 Built-in [cache mechanism](#cache-data-for-you) for you to save the cost of Google APIs.
+- 🧠 Provides intelligent places suggestions powered by
+  [Google Maps Places API](https://developers.google.com/maps/documentation/javascript/places).
+- 🎣 Builds your own customized autocomplete UI by
+  [React hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook).
+- 🔧 [Utility functions](#utility-functions) to do geocoding and get geographic
+  coordinates using
+  [Google Maps Geocoding API](https://developers.google.com/maps/documentation/javascript/geocoding).
+- 🤑 Built-in [cache mechanism](#cache-data-for-you) for you to save the cost of
+  Google APIs.
 - 💰 Built-in debounce mechanism for you to lower the cost of Google APIs.
 - 🚀 Supports asynchronous Google script loading.
 - 📜 Supports [TypeScript](https://www.typescriptlang.org) type definition.
-- ⌨️ Builds a UX-rich component (e.g. [WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete) and keyword support) via comprehensive [demo code](app/src/App/index.tsx).
-- 🦔 Tiny size ([~ 1.7KB gzipped](https://bundlephobia.com/result?p=use-places-autocomplete)). No external dependencies, aside from the `react`.
+- ⌨️ Builds a UX-rich component (e.g.
+  [WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete)
+  and keyword support) via comprehensive [demo code](app/src/App/index.tsx).
+- 🦔 Tiny size
+  ([~ 1.7KB gzipped](https://bundlephobia.com/result?p=use-places-autocomplete)).
+  No external dependencies, aside from the `react`.
 
 ## Requirement
 
-To use `use-places-autocomplete`, you must use `react@16.8.0` or greater which includes hooks.
+To use `use-places-autocomplete`, you must use `react@16.8.0` or greater which
+includes hooks.
 
 ## Installation
 
-This package is distributed via [npm](https://www.npmjs.com/package/use-places-autocomplete).
+This package is distributed via
+[npm](https://www.npmjs.com/package/use-places-autocomplete).
 
 ```sh
 $ yarn add use-places-autocomplete
@@ -46,7 +67,9 @@ $ yarn add use-places-autocomplete
 $ npm install --save use-places-autocomplete
 ```
 
-When working with TypeScript you need to install the [@types/google.maps](https://www.npmjs.com/package/@types/google.maps) as a `devDependencies`.
+When working with TypeScript you need to install the
+[@types/google.maps](https://www.npmjs.com/package/@types/google.maps) as a
+`devDependencies`.
 
 ```sh
 $ yarn add --dev @types/google.maps
@@ -56,7 +79,14 @@ $ npm install --save-dev @types/google.maps
 
 ## Getting Started
 
-`usePlacesAutocomplete` is based on the [Places Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete) (or more specific [docs](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service)) of [Google Maps Place API](https://developers.google.com/maps/documentation/javascript/places). If you are unfamiliar with these APIs, we recommend you review them before we start.
+`usePlacesAutocomplete` is based on the
+[Places Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete)
+(or more specific
+[docs](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service))
+of
+[Google Maps Place API](https://developers.google.com/maps/documentation/javascript/places).
+If you are unfamiliar with these APIs, we recommend you review them before we
+start.
 
 ### Setup APIs
 
@@ -67,7 +97,8 @@ To use this hook, there're two things we need to do:
 
 ### Load the library
 
-Use the `script` tag to load the library in your project and pass the value of the `callback` parameter to the [callbackName](#parameter-optional) option.
+Use the `script` tag to load the library in your project and pass the value of
+the `callback` parameter to the [callbackName](#parameter-optional) option.
 
 ```js
 <script
@@ -76,18 +107,23 @@ Use the `script` tag to load the library in your project and pass the value of t
 ></script>
 ```
 
-> ⚠️ If you got a global function not found error. Make sure `usePlaceAutocomplete` is declared before the script was loaded. You can use the [async or defer](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attributes) attribute of the `<script>` element to achieve that.
+> ⚠️ If you got a global function not found error. Make sure
+> `usePlaceAutocomplete` is declared before the script was loaded. You can use
+> the
+> [async or defer](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attributes)
+> attribute of the `<script>` element to achieve that.
 
 ### Create the component
 
-Now we can start to build our component. Check the [API](#api) out to learn more.
+Now we can start to build our component. Check the [API](#api) out to learn
+more.
 
 ```js
+import useOnclickOutside from "react-cool-onclickoutside";
 import usePlacesAutocomplete, {
   getGeocode,
   getLatLng,
 } from "use-places-autocomplete";
-import useOnclickOutside from "react-cool-onclickoutside";
 
 const PlacesAutocomplete = () => {
   const {
@@ -158,23 +194,32 @@ const PlacesAutocomplete = () => {
 };
 ```
 
-> 💡 [react-cool-onclickoutside](https://github.com/wellyshen/react-cool-onclickoutside) is my other hook library, which can help you handle the interaction of user clicks outside of the component(s).
+> 💡
+> [react-cool-onclickoutside](https://github.com/wellyshen/react-cool-onclickoutside)
+> is my other hook library, which can help you handle the interaction of user
+> clicks outside of the component(s).
 
-Easy right? This is the magic of `usePlacesAutocomplete` ✨. I just showed you how it works via a minimal example. However, you can build a UX rich autocomplete component, like [WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete) and keyword interaction like my [demo](#live-demo), by checking the [code](app/src/App/index.tsx) or integrating this hook with the [combobox](https://reacttraining.com/reach-ui/combobox) of [Reach UI](https://reacttraining.com/reach-ui) to achieve that.
+Easy right? This is the magic of `usePlacesAutocomplete` ✨. I just showed you
+how it works via a minimal example. However, you can build a UX rich
+autocomplete component, like
+[WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete)
+and keyword interaction like my [demo](#live-demo), by checking the
+[code](app/src/App/index.tsx) or integrating this hook with the
+[combobox](https://reacttraining.com/reach-ui/combobox) of
+[Reach UI](https://reacttraining.com/reach-ui) to achieve that.
 
 [![Edit usePlacesAutocomplete x Reach UI](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/useplacesautocomplete-x-reach-ui-lik2c?fontsize=14&hidenavigation=1&theme=dark)
 
 ```js
-import usePlacesAutocomplete from "use-places-autocomplete";
 import {
   Combobox,
   ComboboxInput,
-  ComboboxPopover,
   ComboboxList,
   ComboboxOption,
+  ComboboxPopover,
 } from "@reach/combobox";
-
 import "@reach/combobox/styles.css";
+import usePlacesAutocomplete from "use-places-autocomplete";
 
 const PlacesAutocomplete = () => {
   const {
@@ -210,7 +255,9 @@ const PlacesAutocomplete = () => {
 
 ## Lazily Initializing The Hook
 
-When loading the Google Maps Places API via a 3rd-party library, you may need to wait for the script to be ready before using this hook. However, you can lazily initialize the hook in the following ways, depending on your use case.
+When loading the Google Maps Places API via a 3rd-party library, you may need to
+wait for the script to be ready before using this hook. However, you can lazily
+initialize the hook in the following ways, depending on your use case.
 
 ### Option 1, manually initialize the hook:
 
@@ -256,7 +303,9 @@ const App = () => {
 
 ## Cache Data For You
 
-By default, this library caches the response data to help you save the [cost of Google Maps Places API](https://developers.google.com/maps/billing/gmp-billing#ac-per-request) and optimize search performance.
+By default, this library caches the response data to help you save the
+[cost of Google Maps Places API](https://developers.google.com/maps/billing/gmp-billing#ac-per-request)
+and optimize search performance.
 
 ```js
 const methods = usePlacesAutocomplete({
@@ -265,11 +314,14 @@ const methods = usePlacesAutocomplete({
 });
 ```
 
-> By the way, the cached data is stored via the [Window.sessionStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage).
+> By the way, the cached data is stored via the
+> [Window.sessionStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage).
 
 ### Custom cache key
 
-You may need to have multiple caches. For example, if you use different [place type restrictions](https://developers.google.com/maps/documentation/places/web-service/supported_types#table3_) for different pickers in your app.
+You may need to have multiple caches. For example, if you use different
+[place type restrictions](https://developers.google.com/maps/documentation/places/web-service/supported_types#table3_)
+for different pickers in your app.
 
 ```js
 const methods = usePlacesAutocomplete({
@@ -278,7 +330,8 @@ const methods = usePlacesAutocomplete({
 });
 ```
 
-> Note that usePlacesAutocomplete will prefix this with `upa-`, so the above would become `upa-region-restricted` in sessionStorage.
+> Note that usePlacesAutocomplete will prefix this with `upa-`, so the above
+> would become `upa-region-restricted` in sessionStorage.
 
 ## API
 
@@ -288,7 +341,8 @@ const returnObj = usePlacesAutocomplete(parameterObj);
 
 ### Parameter object (optional)
 
-When using `usePlacesAutocomplete`, you can configure the following options via the parameter.
+When using `usePlacesAutocomplete`, you can configure the following options via
+the parameter.
 
 | Key              | Type            | Default              | Description                                                                                                                                                                                                              |
 | ---------------- | --------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
@@ -317,11 +371,16 @@ It's returned with the following properties.
 
 #### suggestions
 
-The search result of Google Maps Places API, which contains the following properties:
+The search result of Google Maps Places API, which contains the following
+properties:
 
-- `loading: boolean` - indicates the status of a request is pending or has been completed. It's useful for displaying a loading indicator for the user.
-- `status: string` - indicates the status of the API response, which has these [values](https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesServiceStatus). It's useful to decide whether we should display the dropdown or not.
-- `data: array` - an array of suggestion objects each contains all the [data](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompletePrediction).
+- `loading: boolean` - indicates the status of a request is pending or has been
+  completed. It's useful for displaying a loading indicator for the user.
+- `status: string` - indicates the status of the API response, which has these
+  [values](https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesServiceStatus).
+  It's useful to decide whether we should display the dropdown or not.
+- `data: array` - an array of suggestion objects each contains all the
+  [data](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompletePrediction).
 
 #### setValue
 
@@ -347,7 +406,8 @@ const PlacesAutocomplete = () => {
 };
 ```
 
-In addition, the `setValue` method has an extra parameter, which can be used to disable hitting Google Maps Places API.
+In addition, the `setValue` method has an extra parameter, which can be used to
+disable hitting Google Maps Places API.
 
 ```js
 import usePlacesAutocomplete from "use-places-autocomplete";
@@ -385,11 +445,12 @@ const PlacesAutocomplete = () => {
 
 #### clearSuggestions
 
-Calling the method will clear and reset all the properties of the `suggestions` object to default. It's useful for dismissing the dropdown.
+Calling the method will clear and reset all the properties of the `suggestions`
+object to default. It's useful for dismissing the dropdown.
 
 ```js
-import usePlacesAutocomplete from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
+import usePlacesAutocomplete from "use-places-autocomplete";
 
 const PlacesAutocomplete = () => {
   const {
@@ -422,13 +483,20 @@ const PlacesAutocomplete = () => {
 
 ## Utility Functions
 
-We provide [getGeocode](#getgeocode), [getLatLng](#getlatlng), [getZipCode](#getzipcode), and [getDetails](#getdetails) utils for you to do geocoding and get geographic coordinates when needed.
+We provide [getGeocode](#getgeocode), [getLatLng](#getlatlng),
+[getZipCode](#getzipcode), and [getDetails](#getdetails) utils for you to do
+geocoding and get geographic coordinates when needed.
 
 ### getGeocode
 
-It helps you convert address (e.g. "Section 5, Xinyi Road, Xinyi District, Taipei City, Taiwan") into geographic coordinates (e.g. latitude 25.033976 and longitude 121.5645389), or restrict the results to a specific area by [Google Maps Geocoding API](https://developers.google.com/maps/documentation/javascript/geocoding).
+It helps you convert address (e.g. "Section 5, Xinyi Road, Xinyi District,
+Taipei City, Taiwan") into geographic coordinates (e.g. latitude 25.033976 and
+longitude 121.5645389), or restrict the results to a specific area by
+[Google Maps Geocoding API](https://developers.google.com/maps/documentation/javascript/geocoding).
 
-In case you want to restrict the results to a specific area, you will have to pass the `address` and the `componentRestrictions` matching the [GeocoderComponentRestrictions interface](https://developers.google.com/maps/documentation/javascript/reference/geocoder#GeocoderComponentRestrictions).
+In case you want to restrict the results to a specific area, you will have to
+pass the `address` and the `componentRestrictions` matching the
+[GeocoderComponentRestrictions interface](https://developers.google.com/maps/documentation/javascript/reference/geocoder#GeocoderComponentRestrictions).
 
 ```js
 import { getGeocode } from "use-places-autocomplete";
@@ -450,9 +518,15 @@ getGeocode(parameter)
 
 `getGeocode` is an asynchronous function with the following API:
 
-- `parameter: object` - you must supply one, only one of `address` or `location` or `placeId` and optionally `bounds`, `componentRestrictions`, `region`. It'll be passed as [Geocoding Requests](https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingRequests).
-- `results: array` - an array of objects each contains all the [data](https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingResults).
-- `error: string` - the error status of API response, which has these [values](https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingStatusCodes) (except for "OK").
+- `parameter: object` - you must supply one, only one of `address` or `location`
+  or `placeId` and optionally `bounds`, `componentRestrictions`, `region`. It'll
+  be passed as
+  [Geocoding Requests](https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingRequests).
+- `results: array` - an array of objects each contains all the
+  [data](https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingResults).
+- `error: string` - the error status of API response, which has these
+  [values](https://developers.google.com/maps/documentation/javascript/geocoding#GeocodingStatusCodes)
+  (except for "OK").
 
 ### getLatLng
 
@@ -501,13 +575,17 @@ getGeocode(parameter)
 
 - `parameters` - there're two parameters:
   - `1st: object` - the result object of `getGeocode`.
-  - `2nd: boolean` - should use the `short_name` or not from [API response](https://developers.google.com/places/web-service/details#PlaceDetailsResponses), default is `false`.
-- `zipCode: string | null` - the zip code. If the address doesn't have a zip code it will be `null`.
+  - `2nd: boolean` - should use the `short_name` or not from
+    [API response](https://developers.google.com/places/web-service/details#PlaceDetailsResponses),
+    default is `false`.
+- `zipCode: string | null` - the zip code. If the address doesn't have a zip
+  code it will be `null`.
 - `error: any` - an exception.
 
 ### getDetails
 
-Retrieves a great deal of information about a particular place ID (`suggestion`).
+Retrieves a great deal of information about a particular place ID
+(`suggestion`).
 
 ```js
 import usePlacesAutocomplete, { getDetails } from "use-places-autocomplete";
@@ -549,22 +627,31 @@ const PlacesAutocomplete = () => {
 
 `getDetails` is an asynchronous function with the following API:
 
-- `parameter: object` - [the request](https://developers.google.com/maps/documentation/javascript/places#place_details_requests) of the PlacesService's `getDetails()` method. You must supply the `placeId` that you would like details about. If you do not specify any fields or omit the fields parameter you will get every field available.
-- `placeResult: object | null` - [the details](https://developers.google.com/maps/documentation/javascript/reference/places-service#PlaceResult) about the specific place your queried.
+- `parameter: object` -
+  [the request](https://developers.google.com/maps/documentation/javascript/places#place_details_requests)
+  of the PlacesService's `getDetails()` method. You must supply the `placeId`
+  that you would like details about. If you do not specify any fields or omit
+  the fields parameter you will get every field available.
+- `placeResult: object | null` -
+  [the details](https://developers.google.com/maps/documentation/javascript/reference/places-service#PlaceResult)
+  about the specific place your queried.
 - `error: any` - an exception.
 
-> ⚠️ warning, you are billed based on how much information you retrieve, So it is advised that you retrieve just what you need.
+> ⚠️ warning, you are billed based on how much information you retrieve, So it
+> is advised that you retrieve just what you need.
 
 ## Articles / Blog Posts
 
-> 💡 If you have written any blog post or article about `use-places-autocomplete`, please open a PR to add it here.
+> 💡 If you have written any blog post or article about
+> `use-places-autocomplete`, please open a PR to add it here.
 
 - Featured on [React Status #175](https://react.statuscode.com/issues/175).
 - Featured on [React Newsletter #199](https://reactnewsletter.com/issues/199).
 
 ## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+Thanks goes to these wonderful people
+([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -595,4 +682,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
+This project follows the
+[all-contributors](https://github.com/all-contributors/all-contributors)
+specification. Contributions of any kind are welcome!

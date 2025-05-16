@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
-import { getDetailsErr, getDetails } from "../utils";
+import { describe, expect, it, vi } from "vitest";
+import { getDetails, getDetailsErr } from "../utils";
 
 const data = { formatted_address: "123", name: "abc" };
 const error = "ERROR";

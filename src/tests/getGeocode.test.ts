@@ -1,5 +1,5 @@
-import { describe, it, expect, vi } from "vitest";
-import { getGeocode, geocodeErr } from "../utils";
+import { describe, expect, it, vi } from "vitest";
+import { geocodeErr, getGeocode } from "../utils";
 
 const data = [{ place_id: "0109" }];
 const error = "ERROR";
