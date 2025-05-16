@@ -1,4 +1,4 @@
-@import "../mixins/mq.scss";
+@use "../mixins/mq.scss" as mq;
 
 @keyframes wave {
   0%,
@@ -35,7 +35,7 @@
     transform-origin: 130px 106px;
     animation: wave 560ms ease-in-out;
 
-    @include sm {
+    @include mq.sm {
       animation: none;
     }
   }
@@ -43,7 +43,7 @@
   &:hover .octo-arm {
     animation: none;
 
-    @include sm {
+    @include mq.sm {
       animation: wave 560ms ease-in-out;
     }
   }

@@ -1,4 +1,4 @@
-@import "../mixins/mq.scss";
+@use "../mixins/mq.scss" as mq;
 
 body {
   font-family: Roboto, sans-serif;
@@ -15,17 +15,17 @@ body {
   padding: 3.5rem 5%;
   text-align: center;
 
-  @include sm {
+  @include mq.sm {
     padding-left: 10%;
     padding-right: 10%;
   }
 
-  @include md {
+  @include mq.md {
     padding-left: 12.5%;
     padding-right: 12.5%;
   }
 
-  @include lg {
+  @include mq.lg {
     padding-left: 15%;
     padding-right: 15%;
   }
@@ -34,7 +34,7 @@ body {
     margin: 0 0 1rem;
     font-size: 8vw;
 
-    @include md {
+    @include mq.md {
       font-size: 4vw;
     }
   }
@@ -43,7 +43,7 @@ body {
     margin: 0 0 3.5rem;
     font-size: 3vw;
 
-    @include md {
+    @include mq.md {
       font-size: 1.5vw;
     }
   }
@@ -60,7 +60,7 @@ body {
     font-weight: bold;
     line-height: 1.5;
 
-    @include sm {
+    @include mq.sm {
       width: 20rem;
     }
   }
@@ -82,7 +82,7 @@ body {
     width: 15rem;
     cursor: pointer;
 
-    @include sm {
+    @include mq.sm {
       width: 20rem;
     }
   }
