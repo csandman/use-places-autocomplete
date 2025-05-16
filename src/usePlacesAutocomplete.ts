@@ -57,7 +57,7 @@ const usePlacesAutocomplete = ({
     status: "",
     data: [],
   });
-  const asRef = useRef<google.maps.places.AutocompleteService>();
+  const asRef = useRef<google.maps.places.AutocompleteService | null>(null);
   const requestOptionsRef = useLatest(requestOptions);
   const googleMapsRef = useLatest(googleMaps);
 
