@@ -1,0 +1,130 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "wellyshen",
+      "name": "Welly",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/21308003?v=4",
+      "profile": "https://wellyshen.com",
+      "contributions": [
+        "code",
+        "doc",
+        "maintenance"
+      ]
+    },
+    {
+      "login": "kylekirkby",
+      "name": "Kyle",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4564433?v=4",
+      "profile": "https://kylekirkby.github.io",
+      "contributions": [
+        "translation"
+      ]
+    },
+    {
+      "login": "rejvban",
+      "name": "Lazar Karić",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/16634314?v=4",
+      "profile": "https://www.lkaric.tech",
+      "contributions": [
+        "code",
+        "doc"
+      ]
+    },
+    {
+      "login": "reharik",
+      "name": "Raif Harik",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/882382?v=4",
+      "profile": "https://github.com/reharik",
+      "contributions": [
+        "code",
+        "doc",
+        "ideas"
+      ]
+    },
+    {
+      "login": "Xerxes-J",
+      "name": "Xerxes Jarquin",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/18053412?v=4",
+      "profile": "https://github.com/Xerxes-J",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "Isoaxe",
+      "name": "Lucas O'Connell",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/63400356?v=4",
+      "profile": "https://www.lucasoconnell.net/",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "kevenjesus",
+      "name": "Keven Jesus",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5994795?v=4",
+      "profile": "http://www.keven.com.br",
+      "contributions": [
+        "bug"
+      ]
+    },
+    {
+      "login": "viniciusueharaweb",
+      "name": "Vinicius Uehara",
+      "avatar_url": "https://avatars.githubusercontent.com/u/77734864?v=4",
+      "profile": "https://github.com/viniciusueharaweb",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "orbiteleven",
+      "name": "Damon",
+      "avatar_url": "https://avatars.githubusercontent.com/u/331393?v=4",
+      "profile": "http://orbiteleven.net",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "RavenHursT",
+      "name": "Matthew Marcus",
+      "avatar_url": "https://avatars.githubusercontent.com/u/496983?v=4",
+      "profile": "https://github.com/RavenHursT",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "csandman",
+      "name": "Chris Sandvik",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9214195?v=4",
+      "profile": "https://github.com/csandman",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "tyeetale",
+      "name": "Thomas Yee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/17817587?v=4",
+      "profile": "https://linktr.ee/tyeetale",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "use-places-autocomplete",
+  "projectOwner": "wellyshen",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true,
+  "commitType": "docs",
+  "commitConvention": "angular"
+}
