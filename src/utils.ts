@@ -1,10 +1,10 @@
 /* eslint-disable compat/compat */
 
-type GeoArgs = google.maps.GeocoderRequest;
+export type GeoArgs = google.maps.GeocoderRequest;
 
-type GeocodeResult = google.maps.GeocoderResult;
+export type GeocodeResult = google.maps.GeocoderResult;
 
-type GeoReturn = Promise<GeocodeResult[] | null>;
+export type GeoReturn = Promise<GeocodeResult[] | null>;
 
 export const geocodeErr =
   "💡 use-places-autocomplete: Please provide an address when using getGeocode() with the componentRestrictions.";
@@ -24,14 +24,14 @@ export const getGeocode = (args: GeoArgs): GeoReturn => {
   });
 };
 
-type LatLng = { lat: number; lng: number };
+export type LatLng = { lat: number; lng: number };
 
 export const getLatLng = (result: GeocodeResult): LatLng => {
   const { lat, lng } = result.geometry.location;
   return { lat: lat(), lng: lng() };
 };
 
-type ZipCode = string | undefined;
+export type ZipCode = string | undefined;
 
 export const getZipCode = (
   result: GeocodeResult,
@@ -46,9 +46,9 @@ export const getZipCode = (
   return useShortName ? foundZip.short_name : foundZip.long_name;
 };
 
-type GetDetailsArgs = google.maps.places.PlaceDetailsRequest;
+export type GetDetailsArgs = google.maps.places.PlaceDetailsRequest;
 
-type DetailsResult = Promise<google.maps.places.PlaceResult | null>;
+export type DetailsResult = Promise<google.maps.places.PlaceResult | null>;
 
 export const getDetailsErr =
   "💡 use-places-autocomplete: Please provide a place Id when using getDetails() either as a string or as part of an Autocomplete Prediction.";

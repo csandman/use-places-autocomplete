@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
     "target": "ESNext",
     "module": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],

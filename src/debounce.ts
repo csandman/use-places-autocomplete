@@ -1,4 +1,4 @@
-export default <F extends (...args: any[]) => void>(
+const debounce = <F extends (...args: any[]) => void>(
   fn: F,
   delay: number
 ): ((this: ThisParameterType<F>, ...args: Parameters<F>) => void) => {
@@ -14,3 +14,5 @@ export default <F extends (...args: any[]) => void>(
     timer = setTimeout(() => fn.apply(this, args), delay);
   };
 };
+
+export default debounce;

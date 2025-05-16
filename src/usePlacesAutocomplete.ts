@@ -14,21 +14,21 @@ export interface HookArgs {
   initOnMount?: boolean;
 }
 
-type Suggestion = google.maps.places.AutocompletePrediction;
+export type Suggestion = google.maps.places.AutocompletePrediction;
 
-type Status = `${google.maps.places.PlacesServiceStatus}` | "";
+export type Status = `${google.maps.places.PlacesServiceStatus}` | "";
 
-interface Suggestions {
+export interface Suggestions {
   readonly loading: boolean;
   readonly status: Status;
   data: Suggestion[];
 }
 
-interface SetValue {
+export interface SetValue {
   (val: string, shouldFetchData?: boolean): void;
 }
 
-interface HookReturn {
+export interface HookReturn {
   ready: boolean;
   value: string;
   suggestions: Suggestions;
