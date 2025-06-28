@@ -38,7 +38,7 @@
     "link-pkg": "yarn build && npm link app/node_modules/react && yarn link",
     "lint": "run-s lint:*",
     "lint:code": "eslint --fix . --ext .js,.ts,.tsx",
-    "lint:format": "prettier -w . -u --loglevel silent",
+    "lint:format": "prettier -w . -u --log-level silent",
     "lint:type": "tsc",
     "prepare": "husky",
     "test": "vitest",
