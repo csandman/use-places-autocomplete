@@ -34,4 +34,4 @@ jobs:
         run: yarn test:cov
 
       - name: Run build package
-        run: yarn build:prod
+        run: yarn build
