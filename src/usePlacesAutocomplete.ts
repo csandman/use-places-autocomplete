@@ -1,21 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import _debounce from "./debounce";
-import useLatest from "./useLatest";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Loader } from '@googlemaps/js-api-loader';
+import _debounce from './debounce';
+import useLatest from './useLatest';
 
 export interface HookArgs {
-  requestOptions?: Omit<google.maps.places.AutocompletionRequest, "input">;
+  apiKey: string;
+  requestOptions?: Omit<google.maps.places.AutocompleteRequest, 'input'>;
   debounce?: number;
   cache?: number | false;
-  cacheKey?: string;
-  googleMaps?: any;
-  callbackName?: string;
   defaultValue?: string;
-  initOnMount?: boolean;
 }
 
-export type Suggestion = google.maps.places.AutocompletePrediction;
+export type Suggestion = google.maps.places.PlacePrediction;
 
-export type Status = `${google.maps.places.PlacesServiceStatus}` | "";
+export type Status = `${google.maps.places.PlacesServiceStatus}` | '';
 
 export interface Suggestions {
   readonly loading: boolean;
@@ -34,150 +32,181 @@ export interface HookReturn {
   setValue: SetValue;
   clearSuggestions: () => void;
   clearCache: (key?: string) => void;
-  init: () => void;
+  completeSession: () => void;
 }
 
 export const loadApiErr =
-  "💡 use-places-autocomplete: Google Maps Places API library must be loaded. See: https://github.com/wellyshen/use-places-autocomplete#load-the-library";
+  '💡 use-places-autocomplete: Google Maps Places API library must be loaded. See: https://github.com/wellyshen/use-places-autocomplete#load-the-library';
 
 const usePlacesAutocomplete = ({
+  apiKey,
   requestOptions,
   debounce = 200,
   cache = 24 * 60 * 60,
-  cacheKey = "upa",
-  googleMaps,
-  callbackName,
-  defaultValue = "",
-  initOnMount = true,
-}: HookArgs = {}): HookReturn => {
+  defaultValue = '',
+}: HookArgs): HookReturn => {
   const [ready, setReady] = useState(false);
   const [value, setVal] = useState(defaultValue);
   const [suggestions, setSuggestions] = useState<Suggestions>({
     loading: false,
-    status: "",
+    status: '',
     data: [],
   });
-  const asRef = useRef<google.maps.places.AutocompleteService | null>(null);
+
+  const loaderRef = useRef<Loader | null>(null);
+
+  const placesLibRef = useRef<google.maps.PlacesLibrary | null>(null);
+
   const requestOptionsRef = useLatest(requestOptions);
-  const googleMapsRef = useLatest(googleMaps);
 
   const init = useCallback(() => {
-    if (asRef.current) return;
-
-    const { google } = window;
-    const { current: gMaps } = googleMapsRef;
-    const placesLib = gMaps?.places || google?.maps?.places;
-
-    if (!placesLib) {
-      console.error(loadApiErr);
+    if (loaderRef.current) {
       return;
     }
 
-    asRef.current = new placesLib.AutocompleteService();
-    setReady(true);
-  }, [googleMapsRef]);
+    const loadPlacesLib = async () => {
+      loaderRef.current = new Loader({
+        apiKey,
+        version: 'weekly',
+      });
+
+      try {
+        const placesLib = await loaderRef.current.importLibrary('places');
+        placesLibRef.current = placesLib;
+        setReady(true);
+      } catch (err) {
+        console.error(loadApiErr);
+      }
+      setReady(true);
+    };
+
+    loadPlacesLib();
+  }, [apiKey]);
+
+  const sessionTokenRef =
+    useRef<google.maps.places.AutocompleteSessionToken | null>(null);
+
+  const completeSession = () => {
+    if (sessionTokenRef.current) {
+      sessionTokenRef.current = null;
+    }
+  };
 
   const clearSuggestions = useCallback(() => {
-    setSuggestions({ loading: false, status: "", data: [] });
+    setSuggestions({ loading: false, status: '', data: [] });
   }, []);
 
-  const clearCache = useCallback(
-    (key = cacheKey) => {
-      try {
-        sessionStorage.removeItem(key);
-      } catch (error) {
-        // Skip exception
-      }
-    },
-    [cacheKey]
-  );
+  const cacheRef = useRef<
+    Record<string, { data: Suggestion[]; maxAge: number }>
+  >({});
+
+  const clearCache = useCallback(() => {
+    cacheRef.current = {};
+  }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchPredictions = useCallback(
-    _debounce((val: string) => {
+    _debounce(async (val: string) => {
+      if (!placesLibRef.current) {
+        console.error(loadApiErr);
+        return;
+      }
+
+      if (!sessionTokenRef.current) {
+        sessionTokenRef.current =
+          new placesLibRef.current.AutocompleteSessionToken();
+      }
+
       if (!val) {
         clearSuggestions();
         return;
       }
 
-      setSuggestions((prevState) => ({ ...prevState, loading: true }));
-
-      let cachedData: Record<string, { data: Suggestion[]; maxAge: number }> =
-        {};
-
-      try {
-        cachedData = JSON.parse(sessionStorage.getItem(cacheKey) || "{}");
-      } catch (error) {
-        // Skip exception
-      }
+      setSuggestions((prevState) => ({ ...prevState, isLoading: true }));
 
       if (cache) {
-        cachedData = Object.keys(cachedData).reduce(
-          (acc: typeof cachedData, key) => {
-            if (cachedData[key].maxAge - Date.now() >= 0)
-              acc[key] = cachedData[key];
+        // Only keep the cache data that is still valid
+        cacheRef.current = Object.keys(cacheRef.current).reduce(
+          (acc: typeof cacheRef.current, key) => {
+            if (cacheRef.current[key].maxAge - Date.now() >= 0) {
+              acc[key] = cacheRef.current[key];
+            }
             return acc;
           },
           {}
         );
 
-        if (cachedData[val]) {
+        if (cacheRef.current[val]) {
           setSuggestions({
             loading: false,
-            status: "OK",
-            data: cachedData[val].data,
+            status: 'OK',
+            data: cacheRef.current[val].data,
           });
           return;
         }
       }
 
-      asRef.current?.getPlacePredictions(
-        { ...requestOptionsRef.current, input: val },
-        (data: Suggestion[] | null, status: Status) => {
-          setSuggestions({ loading: false, status, data: data || [] });
+      // If there is no cache data, fetch the suggestions from the API
+      const fetchReq: google.maps.places.AutocompleteRequest = {
+        sessionToken: sessionTokenRef.current,
+        language: 'en',
+        input: val,
+        ...requestOptionsRef.current,
+      };
 
-          if (cache && status === "OK") {
-            cachedData[val] = {
-              data: data as Suggestion[],
-              maxAge: Date.now() + cache * 1000,
-            };
+      try {
+        const { suggestions: suggestionsRes } =
+          await placesLibRef.current.AutocompleteSuggestion.fetchAutocompleteSuggestions(
+            fetchReq
+          );
 
-            try {
-              sessionStorage.setItem(cacheKey, JSON.stringify(cachedData));
-            } catch (error) {
-              // Skip exception
+        const placePredictions = suggestionsRes.reduce<Suggestion[]>(
+          (acc, suggestion) => {
+            if (suggestion.placePrediction) {
+              acc.push(suggestion.placePrediction);
             }
-          }
+            return acc;
+          },
+          []
+        );
+
+        setSuggestions({
+          loading: false,
+          status: 'OK',
+          data: placePredictions,
+        });
+
+        if (cache) {
+          cacheRef.current[val] = {
+            data: placePredictions,
+            maxAge: Date.now() + cache * 1000,
+          };
         }
-      );
+      } catch (err) {
+        console.error('Error fetching Google Place predictions');
+        setSuggestions({
+          loading: false,
+          status: 'UNKNOWN_ERROR',
+          data: [],
+        });
+      }
     }, debounce),
-    [cache, cacheKey, clearSuggestions, requestOptionsRef]
+    [cache, clearSuggestions, requestOptionsRef]
   );
 
   const setValue: SetValue = useCallback(
     (val, shouldFetchData = true) => {
       setVal(val);
-      if (asRef.current && shouldFetchData) fetchPredictions(val);
+      if (shouldFetchData) {
+        fetchPredictions(val);
+      }
     },
     [fetchPredictions]
   );
 
   useEffect(() => {
-    if (!initOnMount) return () => null;
-
-    const { google } = window;
-
-    if (!googleMapsRef.current && !google?.maps && callbackName) {
-      (window as any)[callbackName] = init;
-    } else {
-      init();
-    }
-
-    return () => {
-      // @ts-ignore
-      if ((window as any)[callbackName]) delete (window as any)[callbackName];
-    };
-  }, [callbackName, googleMapsRef, init, initOnMount]);
+    init();
+  }, [init]);
 
   return {
     ready,
@@ -186,7 +215,7 @@ const usePlacesAutocomplete = ({
     setValue,
     clearSuggestions,
     clearCache,
-    init,
+    completeSession,
   };
 };
 

@@ -12,7 +12,7 @@ all your interactions with the project.
 
 ## Pull Request Process
 
-1. Fork the repository and create your branch from `master`.
+1. Fork the repository and create your branch from `main`.
 2. Run `yarn` to install dependencies.
 3. If you’ve fixed a bug or added code that should be tested.
 4. Ensure the test suite passes by running `yarn test`.

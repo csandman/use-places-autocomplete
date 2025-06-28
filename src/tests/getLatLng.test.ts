@@ -1,8 +1,8 @@
-import { describe, expect, it } from "vitest";
-import { getLatLng } from "../utils";
+import { describe, expect, it } from 'vitest';
+import { getLatLng } from '../utils';
 
-describe("getLatLng", () => {
-  it("should handle success correctly", () => {
+describe('getLatLng', () => {
+  it('should handle success correctly', () => {
     const latLng = { lat: 123, lng: 456 };
     const result = getLatLng({
       geometry: {

@@ -19,7 +19,7 @@
     "react-cool-onclickoutside": "^1.7.0",
     "react-dom": "^19.1.0",
     "sass": "^1.89.0",
-    "use-places-autocomplete": "file:../"
+    "use-places-autocomplete": "file:.."
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

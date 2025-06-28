@@ -75,6 +75,7 @@ body {
     list-style-type: none;
     text-align: left;
     overflow-y: auto;
+    background-color: white;
   }
 
   .list-item {
@@ -100,5 +101,13 @@ body {
   .logo {
     padding: 1rem 1.2rem;
     text-align: right;
+  }
+
+  .address {
+    margin-top: 2rem;
+  }
+
+  li {
+    text-align: left;
   }
 }

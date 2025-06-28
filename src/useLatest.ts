@@ -1,5 +1,5 @@
-import type { RefObject } from "react";
-import { useRef } from "react";
+import type { RefObject } from 'react';
+import { useRef } from 'react';
 
 const useLatest = <T>(val: T): RefObject<T> => {
   const ref = useRef(val);

@@ -32,18 +32,23 @@
     "clean:cov": "rimraf coverage",
     "clean:dist": "rimraf dist",
     "clean:size": "rimraf .size-snapshot.json",
+    "dev": "run-p dev:*",
+    "dev:app": "cd app && yarn && yarn dev",
+    "dev:pkg": "tsup --watch",
     "link-pkg": "yarn build && npm link app/node_modules/react && yarn link",
     "lint": "run-s lint:*",
     "lint:code": "eslint --fix . --ext .js,.ts,.tsx",
     "lint:format": "prettier -w . -u --loglevel silent",
     "lint:type": "tsc",
     "prepare": "husky",
-    "start": "yarn clean:dist && tsup --watch",
     "test": "vitest",
     "test:cov": "yarn clean:cov && vitest --coverage",
     "test:watch": "yarn test --watch",
     "preversion": "run-s lint test build:prod",
     "postversion": "git push --follow-tags --no-verify && npm publish && yarn clean:dist && yarn clean:size"
+  },
+  "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8"
   },
   "peerDependencies": {
     "react": ">=16.8.0"

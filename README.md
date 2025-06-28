@@ -1,11 +1,11 @@
-# <em><b>USE-PLACES-AUTOCOMPLETE</b></em>
+# use-places-autocomplete
 
 This is a React
 [hook](https://reactjs.org/docs/hooks-custom.html#using-a-custom-hook) for
-[Google Maps Places Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete),
+[Google Maps Places Autocomplete](https://developers.google.com/maps/documentation/javascript/place-autocomplete-data),
 which helps you build a UI component with the feature of place autocomplete
 easily! By leveraging the power of
-[Google Maps Places API](https://developers.google.com/maps/documentation/javascript/places),
+[Google Maps Places API](https://developers.google.com/maps/documentation/javascript/place),
 you can provide a great UX (user experience) for user interacts with your search
 bar or form, etc. Hope you guys 👍🏻 it.
 
@@ -15,7 +15,7 @@ bar or form, etc. Hope you guys 👍🏻 it.
 about it.
 
 [![build status](https://img.shields.io/github/workflow/status/wellyshen/use-places-autocomplete/CI?style=flat-square)](https://github.com/wellyshen/use-places-autocomplete/actions?query=workflow%3ACI)
-[![coverage status](https://img.shields.io/coveralls/github/wellyshen/use-places-autocomplete?style=flat-square)](https://coveralls.io/github/wellyshen/use-places-autocomplete?branch=master)
+[![coverage status](https://img.shields.io/coveralls/github/wellyshen/use-places-autocomplete?style=flat-square)](https://coveralls.io/github/wellyshen/use-places-autocomplete?branch=main)
 [![npm version](https://img.shields.io/npm/v/use-places-autocomplete?style=flat-square)](https://www.npmjs.com/package/use-places-autocomplete)
 [![npm downloads](https://img.shields.io/npm/dm/use-places-autocomplete?style=flat-square)](https://www.npmtrends.com/use-places-autocomplete)
 [![npm downloads](https://img.shields.io/npm/dt/use-places-autocomplete?style=flat-square)](https://www.npmtrends.com/use-places-autocomplete)
@@ -45,7 +45,7 @@ about it.
 - 🚀 Supports asynchronous Google script loading.
 - 📜 Supports [TypeScript](https://www.typescriptlang.org) type definition.
 - ⌨️ Builds a UX-rich component (e.g.
-  [WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete)
+  [WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/main/aria-practices-DeletedSectionsArchive.html#autocomplete)
   and keyword support) via comprehensive [demo code](app/src/App/index.tsx).
 - 🦔 Tiny size
   ([~ 1.7KB gzipped](https://bundlephobia.com/result?p=use-places-autocomplete)).
@@ -80,11 +80,11 @@ $ npm install --save-dev @types/google.maps
 ## Getting Started
 
 `usePlacesAutocomplete` is based on the
-[Places Autocomplete](https://developers.google.com/maps/documentation/javascript/places-autocomplete)
+[Places Autocomplete](https://developers.google.com/maps/documentation/javascript/place-autocomplete-data)
 (or more specific
-[docs](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service))
+[docs](https://developers.google.com/maps/documentation/javascript/reference/autocomplete-data))
 of
-[Google Maps Place API](https://developers.google.com/maps/documentation/javascript/places).
+[Google Maps Place API](https://developers.google.com/maps/documentation/javascript/place).
 If you are unfamiliar with these APIs, we recommend you review them before we
 start.
 
@@ -92,26 +92,23 @@ start.
 
 To use this hook, there're two things we need to do:
 
-1. [Enable Google Maps Places API](https://developers.google.com/maps/documentation/javascript/places#enable_apis).
-2. [Get an API key](https://developers.google.com/maps/documentation/javascript/get-api-key).
+1. [Enable Google Maps Places API (New)](https://developers.google.com/maps/documentation/places/web-service/cloud-setup).
+2. [Get an API key](https://developers.google.com/maps/documentation/places/web-service/get-api-key).
 
 ### Load the library
 
-Use the `script` tag to load the library in your project and pass the value of
-the `callback` parameter to the [callbackName](#parameter-optional) option.
+In the new version of `use-places-autocomplete`, this package is using the
+[`@googlemaps/js-api-loader`](https://developers.google.com/maps/documentation/javascript/load-maps-js-api#js-api-loader)
+package to internally load the places API, without needing a `script` tag. Now
+all you need to do is pass in the `apiKey` field into the hook's config:
 
-```js
-<script
-  defer
-  src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=YOUR_CALLBACK_NAME"
-></script>
+```ts
+import { usePlacesAutocomplete } from 'use-places-autocomplete';
+
+const placesAutocomplete = usePlacesAutocomplete({
+  apiKey: 'MY_API_KEY',
+});
 ```
-
-> ⚠️ If you got a global function not found error. Make sure
-> `usePlaceAutocomplete` is declared before the script was loaded. You can use
-> the
-> [async or defer](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script#attributes)
-> attribute of the `<script>` element to achieve that.
 
 ### Create the component
 
@@ -119,10 +116,10 @@ Now we can start to build our component. Check the [API](#api) out to learn
 more.
 
 ```js
-import useOnclickOutside from "react-cool-onclickoutside";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
+import type { ChangeEvent } from "react";
+import {
+  usePlacesAutocomplete,
+  type Suggestion,
 } from "use-places-autocomplete";
 
 const PlacesAutocomplete = () => {
@@ -131,56 +128,56 @@ const PlacesAutocomplete = () => {
     value,
     suggestions: { status, data },
     setValue,
-    clearSuggestions,
+    completeSession,
   } = usePlacesAutocomplete({
-    callbackName: "YOUR_CALLBACK_NAME",
+    apiKey: "YOUR_API_KEY",
     requestOptions: {
       /* Define search scope here */
     },
     debounce: 300,
   });
-  const ref = useOnclickOutside(() => {
-    // When the user clicks outside of the component, we can dismiss
-    // the searched suggestions by calling this method
-    clearSuggestions();
-  });
 
-  const handleInput = (e) => {
+  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
     // Update the keyword of the input element
     setValue(e.target.value);
   };
 
   const handleSelect =
-    ({ description }) =>
-    () => {
-      // When the user selects a place, we can replace the keyword without request data from API
-      // by setting the second parameter to "false"
-      setValue(description, false);
-      clearSuggestions();
+    (suggestion: Suggestion) =>
+    async () => {
+      setValue(suggestion.text.text, false);
 
-      // Get latitude and longitude via utility functions
-      getGeocode({ address: description }).then((results) => {
-        const { lat, lng } = getLatLng(results[0]);
-        console.log("📍 Coordinates: ", { lat, lng });
-      });
+      // First, convert the suggestion to a place
+      const place = suggestion.toPlace();
+      // Then, fetch the fields you want from the place
+      await place.fetchFields({ fields: ["addressComponents", "formattedAddress"] });
+
+      // Complete the autocomplete session so a new one can be started
+      // https://developers.google.com/maps/documentation/places/web-service/place-session-tokens
+      completeSession();
+
+      // Finally, use those fields how you want
+      console.log(place.formattedAddress);
+      console.log(place.addressComponents);
     };
 
   const renderSuggestions = () =>
     data.map((suggestion) => {
       const {
-        place_id,
-        structured_formatting: { main_text, secondary_text },
+        placeId,
+        mainText,
+        secondaryText,
       } = suggestion;
 
       return (
-        <li key={place_id} onClick={handleSelect(suggestion)}>
-          <strong>{main_text}</strong> <small>{secondary_text}</small>
+        <li key={placeId} onClick={handleSelect(suggestion)}>
+          <strong>{mainText?.text}</strong> <small>{secondaryText?.text}</small>
         </li>
       );
     });
 
   return (
-    <div ref={ref}>
+    <div>
       <input
         value={value}
         onChange={handleInput}
@@ -194,15 +191,10 @@ const PlacesAutocomplete = () => {
 };
 ```
 
-> 💡
-> [react-cool-onclickoutside](https://github.com/wellyshen/react-cool-onclickoutside)
-> is my other hook library, which can help you handle the interaction of user
-> clicks outside of the component(s).
-
 Easy right? This is the magic of `usePlacesAutocomplete` ✨. I just showed you
 how it works via a minimal example. However, you can build a UX rich
 autocomplete component, like
-[WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/master/aria-practices-DeletedSectionsArchive.html#autocomplete)
+[WAI-ARIA compliant](https://rawgit.com/w3c/aria-practices/main/aria-practices-DeletedSectionsArchive.html#autocomplete)
 and keyword interaction like my [demo](#live-demo), by checking the
 [code](app/src/App/index.tsx) or integrating this hook with the
 [combobox](https://reacttraining.com/reach-ui/combobox) of
@@ -217,9 +209,9 @@ import {
   ComboboxList,
   ComboboxOption,
   ComboboxPopover,
-} from "@reach/combobox";
-import "@reach/combobox/styles.css";
-import usePlacesAutocomplete from "use-places-autocomplete";
+} from '@reach/combobox';
+import '@reach/combobox/styles.css';
+import usePlacesAutocomplete from 'use-places-autocomplete';
 
 const PlacesAutocomplete = () => {
   const {
@@ -227,7 +219,7 @@ const PlacesAutocomplete = () => {
     value,
     suggestions: { status, data },
     setValue,
-  } = usePlacesAutocomplete({ callbackName: "YOUR_CALLBACK_NAME" });
+  } = usePlacesAutocomplete({ apiKey: 'YOUR_API_KEY' });
 
   const handleInput = (e) => {
     setValue(e.target.value);
@@ -242,61 +234,13 @@ const PlacesAutocomplete = () => {
       <ComboboxInput value={value} onChange={handleInput} disabled={!ready} />
       <ComboboxPopover>
         <ComboboxList>
-          {status === "OK" &&
-            data.map(({ place_id, description }) => (
-              <ComboboxOption key={place_id} value={description} />
+          {status === 'OK' &&
+            data.map(({ placeId, text }) => (
+              <ComboboxOption key={placeId} value={test.text} />
             ))}
         </ComboboxList>
       </ComboboxPopover>
     </Combobox>
-  );
-};
-```
-
-## Lazily Initializing The Hook
-
-When loading the Google Maps Places API via a 3rd-party library, you may need to
-wait for the script to be ready before using this hook. However, you can lazily
-initialize the hook in the following ways, depending on your use case.
-
-### Option 1, manually initialize the hook:
-
-```js
-import usePlacesAutocomplete from "use-places-autocomplete";
-
-const App = () => {
-  const { init } = usePlacesAutocomplete({
-    initOnMount: false, // Disable initializing when the component mounts, default is true
-  });
-
-  const [loading] = useGoogleMapsApi({
-    library: "places",
-    onLoad: () => init(), // Lazily initializing the hook when the script is ready
-  });
-
-  return <div>{/* Some components... */}</div>;
-};
-```
-
-### Option 2, wrap the hook into a conditional component:
-
-```js
-import usePlacesAutocomplete from "use-places-autocomplete";
-
-const PlacesAutocomplete = () => {
-  const { ready, value, suggestions, setValue } = usePlacesAutocomplete();
-
-  return <div>{/* Some components... */}</div>;
-};
-
-const App = () => {
-  const [loading] = useGoogleMapsApi({ library: "places" });
-
-  return (
-    <div>
-      {!loading ? <PlacesAutocomplete /> : null}
-      {/* Other components... */}
-    </div>
   );
 };
 ```
@@ -314,25 +258,6 @@ const methods = usePlacesAutocomplete({
 });
 ```
 
-> By the way, the cached data is stored via the
-> [Window.sessionStorage API](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage).
-
-### Custom cache key
-
-You may need to have multiple caches. For example, if you use different
-[place type restrictions](https://developers.google.com/maps/documentation/places/web-service/supported_types#table3_)
-for different pickers in your app.
-
-```js
-const methods = usePlacesAutocomplete({
-  // Provide a custom cache key
-  cacheKey: "region-restricted",
-});
-```
-
-> Note that usePlacesAutocomplete will prefix this with `upa-`, so the above
-> would become `upa-region-restricted` in sessionStorage.
-
 ## API
 
 ```js
@@ -344,30 +269,27 @@ const returnObj = usePlacesAutocomplete(parameterObj);
 When using `usePlacesAutocomplete`, you can configure the following options via
 the parameter.
 
-| Key              | Type            | Default              | Description                                                                                                                                                                                                              |
-| ---------------- | --------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `requestOptions` | object          |                      | The [request options](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompletionRequest) of Google Maps Places API except for `input` (e.g. bounds, radius, etc.). |
-| `googleMaps`     | object          | `window.google.maps` | In case you want to provide your own Google Maps object, pass the `google.maps` to it.                                                                                                                                   |
-| `callbackName`   | string          |                      | The value of the `callback` parameter when [loading the Google Maps JavaScript library](#load-the-library).                                                                                                              |
-| `debounce`       | number          | `200`                | Number of milliseconds to delay before making a request to Google Maps Places API.                                                                                                                                       |
-| `cache`          | number \| false | `86400` (24 hours)   | Number of seconds to [cache the response data of Google Maps Places API](#cache-data-for-you).                                                                                                                           |
-| `cacheKey`       | string          | `"upa"`              | Optional cache key so one can use multiple caches if needed.                                                                                                                                                             |
-| `defaultValue`   | string          | `""`                 | Default value for the `input` element.                                                                                                                                                                                   |
-| `initOnMount`    | boolean         | `true`               | Initialize the hook with Google Maps Places API when the component mounts.                                                                                                                                               |
+| Key              | Type            | Default            | Description                                                                                                                                                                                                              |
+| ---------------- | --------------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `apiKey`         | string          |                    | The API key from GCP that is set up to work with the Places API (New). This is a required argument to use the hook.                                                                                                      |
+| `requestOptions` | object          |                    | The [request options](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompletionRequest) of Google Maps Places API except for `input` (e.g. bounds, radius, etc.). |
+| `debounce`       | number          | `200`              | Number of milliseconds to delay before making a request to Google Maps Places API.                                                                                                                                       |
+| `cache`          | number \| false | `86400` (24 hours) | Number of seconds to [cache the response data of Google Maps Places API](#cache-data-for-you).                                                                                                                           |
+| `defaultValue`   | string          | `""`               | Default value for the `input` element.                                                                                                                                                                                   |
 
 ### Return object
 
 It's returned with the following properties.
 
-| Key                | Type     | Default                                    | Description                                                                |
-| ------------------ | -------- | ------------------------------------------ | -------------------------------------------------------------------------- |
-| `ready`            | boolean  | `false`                                    | The ready status of `usePlacesAutocomplete`.                               |
-| `value`            | string   | `""`                                       | `value` for the input element.                                             |
-| `suggestions`      | object   | `{ loading: false, status: "", data: [] }` | See [suggestions](#suggestions).                                           |
-| `setValue`         | function | `(value, shouldFetchData = true) => {}`    | See [setValue](#setvalue).                                                 |
-| `clearSuggestions` | function |                                            | See [clearSuggestions](#clearsuggestions).                                 |
-| `clearCache`       | function | `(key = cacheKey) => {}`                   | Clears the [cached data](#cache-data-for-you).                             |
-| `init`             | function |                                            | Useful when [lazily initializing the hook](#lazily-initializing-the-hook). |
+| Key                | Type     | Default                                    | Description                                                                                                                                                                   |
+| ------------------ | -------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ready`            | boolean  | `false`                                    | The ready status of `usePlacesAutocomplete`.                                                                                                                                  |
+| `value`            | string   | `""`                                       | `value` for the input element.                                                                                                                                                |
+| `suggestions`      | object   | `{ loading: false, status: "", data: [] }` | See [suggestions](#suggestions).                                                                                                                                              |
+| `setValue`         | function | `(value, shouldFetchData = true) => {}`    | See [setValue](#setvalue).                                                                                                                                                    |
+| `clearSuggestions` | function |                                            | See [clearSuggestions](#clearsuggestions).                                                                                                                                    |
+| `clearCache`       | function | `(key = cacheKey) => {}`                   | Clears the [cached data](#cache-data-for-you).                                                                                                                                |
+| `completeSession`  | function | `() => {}`                                 | Used to complete an [autocomplete session](https://developers.google.com/maps/documentation/places/web-service/place-session-tokens) once a place's details have been loaded. |
 
 #### suggestions
 
@@ -380,14 +302,14 @@ properties:
   [values](https://developers.google.com/maps/documentation/javascript/reference/places-service#PlacesServiceStatus).
   It's useful to decide whether we should display the dropdown or not.
 - `data: array` - an array of suggestion objects each contains all the
-  [data](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompletePrediction).
+  [data](https://developers.google.com/maps/documentation/javascript/reference/autocomplete-data#PlacePrediction).
 
 #### setValue
 
 Set the `value` of the input element. Use the case below.
 
-```js
-import usePlacesAutocomplete from "use-places-autocomplete";
+```tsx
+import usePlacesAutocomplete from 'use-places-autocomplete';
 
 const PlacesAutocomplete = () => {
   const { value, setValue } = usePlacesAutocomplete();
@@ -409,8 +331,8 @@ const PlacesAutocomplete = () => {
 In addition, the `setValue` method has an extra parameter, which can be used to
 disable hitting Google Maps Places API.
 
-```js
-import usePlacesAutocomplete from "use-places-autocomplete";
+```tsx
+import usePlacesAutocomplete from 'use-places-autocomplete';
 
 const PlacesAutocomplete = () => {
   const {
@@ -420,24 +342,24 @@ const PlacesAutocomplete = () => {
   } = usePlacesAutocomplete();
 
   const handleSelect =
-    ({ description }) =>
+    ({ text }) =>
     () => {
       // When the user selects a place, we can replace the keyword without requesting data from the API
       // by setting the second parameter to "false"
-      setValue(description, false);
+      setValue(text.text, false);
     };
 
   const renderSuggestions = () =>
     data.map((suggestion) => (
-      <li key={suggestion.place_id} onClick={handleSelect(suggestion)}>
-        {/* Render suggestion text */}
+      <li key={suggestion.placeId} onClick={handleSelect(suggestion)}>
+        {suggestion.text.text}
       </li>
     ));
 
   return (
     <div>
       <input value={value} onChange={handleInput} />
-      {status === "OK" && <ul>{renderSuggestions()}</ul>}
+      {status === 'OK' && <ul>{renderSuggestions()}</ul>}
     </div>
   );
 };
@@ -448,9 +370,9 @@ const PlacesAutocomplete = () => {
 Calling the method will clear and reset all the properties of the `suggestions`
 object to default. It's useful for dismissing the dropdown.
 
-```js
-import useOnclickOutside from "react-cool-onclickoutside";
-import usePlacesAutocomplete from "use-places-autocomplete";
+```tsx
+import useOnclickOutside from 'react-cool-onclickoutside';
+import usePlacesAutocomplete from 'use-places-autocomplete';
 
 const PlacesAutocomplete = () => {
   const {
@@ -475,7 +397,7 @@ const PlacesAutocomplete = () => {
     <div ref={ref}>
       <input value={value} onChange={handleInput} />
       {/* After calling the clearSuggestions(), the "status" is reset so the dropdown is hidden */}
-      {status === "OK" && <ul>{renderSuggestions()}</ul>}
+      {status === 'OK' && <ul>{renderSuggestions()}</ul>}
     </div>
   );
 };
@@ -483,9 +405,9 @@ const PlacesAutocomplete = () => {
 
 ## Utility Functions
 
-We provide [getGeocode](#getgeocode), [getLatLng](#getlatlng),
-[getZipCode](#getzipcode), and [getDetails](#getdetails) utils for you to do
-geocoding and get geographic coordinates when needed.
+We provide [getGeocode](#getgeocode) and [getLatLng](#getlatlng),
+[getZipCode](#getzipcode) utils for you to do geocoding and get geographic
+coordinates when needed.
 
 ### getGeocode
 
@@ -499,20 +421,20 @@ pass the `address` and the `componentRestrictions` matching the
 [GeocoderComponentRestrictions interface](https://developers.google.com/maps/documentation/javascript/reference/geocoder#GeocoderComponentRestrictions).
 
 ```js
-import { getGeocode } from "use-places-autocomplete";
+import { getGeocode } from 'use-places-autocomplete';
 
 const parameter = {
-  address: "Section 5, Xinyi Road, Xinyi District, Taipei City, Taiwan",
+  address: 'Section 5, Xinyi Road, Xinyi District, Taipei City, Taiwan',
   // or
-  placeId: "ChIJraeA2rarQjQRPBBjyR3RxKw",
+  placeId: 'ChIJraeA2rarQjQRPBBjyR3RxKw',
 };
 
 getGeocode(parameter)
   .then((results) => {
-    console.log("Geocoding results: ", results);
+    console.log('Geocoding results: ', results);
   })
   .catch((error) => {
-    console.log("Error: ", error);
+    console.log('Error: ', error);
   });
 ```
 
@@ -533,15 +455,15 @@ getGeocode(parameter)
 It helps you get the `lat` and `lng` from the result object of `getGeocode`.
 
 ```js
-import { getGeocode, getLatLng } from "use-places-autocomplete";
+import { getGeocode, getLatLng } from 'use-places-autocomplete';
 
 const parameter = {
-  address: "Section 5, Xinyi Road, Xinyi District, Taipei City, Taiwan",
+  address: 'Section 5, Xinyi Road, Xinyi District, Taipei City, Taiwan',
 };
 
 getGeocode(parameter).then((results) => {
   const { lat, lng } = getLatLng(results[0]);
-  console.log("Coordinates: ", { lat, lng });
+  console.log('Coordinates: ', { lat, lng });
 });
 ```
 
@@ -556,10 +478,10 @@ getGeocode(parameter).then((results) => {
 It helps you get the `postal_code` from the result object of `getGeocode`.
 
 ```js
-import { getGeocode, getZipCode } from "use-places-autocomplete";
+import { getGeocode, getZipCode } from 'use-places-autocomplete';
 
 const parameter = {
-  address: "Section 5, Xinyi Road, Xinyi District, Taipei City, Taiwan",
+  address: 'Section 5, Xinyi Road, Xinyi District, Taipei City, Taiwan',
 };
 
 getGeocode(parameter)
@@ -567,7 +489,7 @@ getGeocode(parameter)
   // by setting the second parameter to "true"
   .then((results) => {
     const zipCode = getZipCode(results[0], false);
-    console.log("ZIP Code: ", zipCode);
+    console.log('ZIP Code: ', zipCode);
   });
 ```
 
@@ -588,7 +510,7 @@ Retrieves a great deal of information about a particular place ID
 (`suggestion`).
 
 ```js
-import usePlacesAutocomplete, { getDetails } from "use-places-autocomplete";
+import usePlacesAutocomplete, { getDetails } from 'use-places-autocomplete';
 
 const PlacesAutocomplete = () => {
   const { suggestions, value, setValue } = usePlacesAutocomplete();
@@ -603,15 +525,15 @@ const PlacesAutocomplete = () => {
       // Use the "place_id" of suggestion from the dropdown (object), here just taking the first suggestion for brevity
       placeId: suggestions[0].place_id,
       // Specify the return data that you want (optional)
-      fields: ["name", "rating"],
+      fields: ['name', 'rating'],
     };
 
     getDetails(parameter)
       .then((details) => {
-        console.log("Details: ", details);
+        console.log('Details: ', details);
       })
       .catch((error) => {
-        console.log("Error: ", error);
+        console.log('Error: ', error);
       });
   };
 

@@ -1,15 +1,14 @@
-import type { FC, ChangeEvent } from "react";
+import type { ChangeEvent, FC } from "react";
 import { type KeyboardEvent, useState } from "react";
-import usePlacesAutocomplete from "use-places-autocomplete";
 import useOnclickOutside from "react-cool-onclickoutside";
-
+import usePlacesAutocomplete, {
+  type Suggestion,
+} from "use-places-autocomplete";
 import GitHubCorner from "../GitHubCorner";
 import styles from "./styles.module.scss";
 
 let cachedVal = "";
 const acceptedKeys = ["ArrowUp", "ArrowDown", "Escape", "Enter"];
-
-type Suggestion = google.maps.places.AutocompletePrediction;
 
 const App: FC = () => {
   const [currIndex, setCurrIndex] = useState<number | null>(null);
@@ -19,7 +18,9 @@ const App: FC = () => {
     suggestions: { status, data },
     setValue,
     clearSuggestions,
-  } = usePlacesAutocomplete({ callbackName: "initMap" });
+  } = usePlacesAutocomplete({
+    apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+  });
   const hasSuggestions = status === "OK";
 
   const dismissSuggestions = () => {
@@ -34,12 +35,23 @@ const App: FC = () => {
     cachedVal = e.target.value;
   };
 
-  const handleSelect =
-    ({ description }: Suggestion) =>
-    () => {
-      setValue(description, false);
-      dismissSuggestions();
-    };
+  const [formattedAddress, setFormattedAddress] = useState<string | null>(null);
+  const [selectedAddressComponents, setSelectedAddressComponents] = useState<
+    google.maps.places.AddressComponent[] | null
+  >(null);
+
+  const handleSelect = (suggestion: Suggestion) => async () => {
+    setValue(suggestion.text.text, false);
+    dismissSuggestions();
+
+    const place = suggestion.toPlace();
+    await place.fetchFields({
+      fields: ["addressComponents", "formattedAddress"],
+    });
+
+    setFormattedAddress(place.formattedAddress ?? null);
+    setSelectedAddressComponents(place.addressComponents ?? null);
+  };
 
   const handleEnter = (idx: number) => () => {
     setCurrIndex(idx);
@@ -69,19 +81,21 @@ const App: FC = () => {
     }
 
     setCurrIndex(nextIndex);
-    setValue((nextIndex !== null && data[nextIndex]) ? data[nextIndex].description : cachedVal, false);
+    setValue(
+      nextIndex !== null && data[nextIndex]
+        ? data[nextIndex]?.text.text
+        : cachedVal,
+      false
+    );
   };
 
   const renderSuggestions = (): React.ReactElement => {
-    const suggestions = data.map((suggestion: Suggestion, idx: number) => {
-      const {
-        place_id,
-        structured_formatting: { main_text, secondary_text },
-      } = suggestion;
+    const suggestions = data.map((suggestion: Suggestion, idx) => {
+      const { placeId, mainText, secondaryText } = suggestion;
 
       return (
         <li
-          key={place_id}
+          key={placeId}
           id={`ex-list-item-${idx}`}
           className={`${styles["list-item"]} ${
             idx === currIndex ? `${styles["list-item-darken"]}` : ""
@@ -91,8 +105,8 @@ const App: FC = () => {
           role="option"
           aria-selected={idx === currIndex}
         >
-          <strong>{main_text}</strong>
-          <small className={styles["sub-text"]}>{secondary_text}</small>
+          <strong>{mainText?.text}</strong>
+          <small className={styles["sub-text"]}>{secondaryText?.text}</small>
         </li>
       );
     });
@@ -147,6 +161,21 @@ const App: FC = () => {
           </ul>
         )}
       </div>
+
+      {!!formattedAddress && !!selectedAddressComponents && (
+        <div className={styles.address}>
+          <h3>Formatted Address</h3>
+          <p>{formattedAddress}</p>
+          <h3>Address Components</h3>
+          <ul>
+            {selectedAddressComponents.map((component) => (
+              <li key={component.longText}>
+                {component.longText} ({component.types.join(", ")})
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };

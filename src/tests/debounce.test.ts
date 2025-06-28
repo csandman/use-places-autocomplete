@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from "vitest";
-import debounce from "../debounce";
+import { describe, expect, it, vi } from 'vitest';
+import debounce from '../debounce';
 
-describe("debounce", () => {
-  it("should trigger function immediately", () => {
+describe('debounce', () => {
+  it('should trigger function immediately', () => {
     vi.useFakeTimers();
     const fn = vi.fn();
     const debouncedFn = debounce(fn, 100);

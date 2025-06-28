@@ -1,21 +1,18 @@
-import usePlacesAutocomplete from "./usePlacesAutocomplete";
+import usePlacesAutocomplete from './usePlacesAutocomplete';
 
 export default usePlacesAutocomplete;
 export { usePlacesAutocomplete };
-export { getGeocode, getLatLng, getZipCode, getDetails } from "./utils";
+export { getGeocode, getLatLng, getZipCode } from './utils';
 export type {
   HookArgs,
   HookReturn,
   Suggestion,
-  Status,
   Suggestions,
-} from "./usePlacesAutocomplete";
+} from './usePlacesAutocomplete';
 export type {
   GeoArgs,
   GeocodeResult,
   GeoReturn,
-  GetDetailsArgs,
-  DetailsResult,
   LatLng,
   ZipCode,
-} from "./utils";
+} from './utils';
