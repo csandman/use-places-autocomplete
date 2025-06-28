@@ -1,8 +1,8 @@
-/* eslint-disable jest/no-commented-out-tests */
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import _debounce from '../debounce';
-import usePlacesAutocomplete, { HookArgs } from '../usePlacesAutocomplete';
+import type { HookArgs } from '../usePlacesAutocomplete';
+import usePlacesAutocomplete from '../usePlacesAutocomplete';
 
 vi.useFakeTimers();
 vi.mock('../debounce');
